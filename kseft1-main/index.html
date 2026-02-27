@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Reveal</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- WebGL Shaders embedded in HTML (standard pattern for WebGL projects) -->
+
+    <script type="x-shader/x-vertex" id="vertShader">
+        precision highp float;
+        attribute vec2 aPosition;
+        varying vec2 vUv;
+        varying vec2 vL;
+        varying vec2 vR;
+        varying vec2 vT;
+        varying vec2 vB;
+        uniform vec2 u_texel;
+
+        void main () {
+            vUv = aPosition * 0.5 + 0.5;
+            vL = vUv - vec2(u_texel.x, 0.0);
+            vR = vUv + vec2(u_texel.x, 0.0);
+            vT = vUv + vec2(0.0, u_texel.y);
+            vB = vUv - vec2(0.0, u_texel.y);
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragAdvection">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D u_velocity;
+        uniform sampler2D u_source;
+        uniform vec2 u_texel;
+        uniform vec2 u_dyeTexel;
+        uniform float u_dt;
+        uniform float u_dissipation;
+
+        vec4 bilerp(sampler2D sam, vec2 uv, vec2 tsize) {
+            vec2 st = uv / tsize - 0.5;
+            vec2 iuv = floor(st);
+            vec2 fuv = fract(st);
+            vec4 a = texture2D(sam, (iuv + vec2(0.5, 0.5)) * tsize);
+            vec4 b = texture2D(sam, (iuv + vec2(1.5, 0.5)) * tsize);
+            vec4 c = texture2D(sam, (iuv + vec2(0.5, 1.5)) * tsize);
+            vec4 d = texture2D(sam, (iuv + vec2(1.5, 1.5)) * tsize);
+            return mix(mix(a, b, fuv.x), mix(c, d, fuv.x), fuv.y);
+        }
+
+        void main () {
+            vec2 coord = vUv - u_dt * bilerp(u_velocity, vUv, u_texel).xy * u_texel;
+            gl_FragColor = u_dissipation * bilerp(u_source, coord, u_dyeTexel);
+            gl_FragColor.a = 1.0;
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragDivergence">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        varying vec2 vL;
+        varying vec2 vR;
+        varying vec2 vT;
+        varying vec2 vB;
+        uniform sampler2D u_velocity;
+
+        void main () {
+            float L = texture2D(u_velocity, vL).x;
+            float R = texture2D(u_velocity, vR).x;
+            float T = texture2D(u_velocity, vT).y;
+            float B = texture2D(u_velocity, vB).y;
+            gl_FragColor = vec4(0.5 * (R - L + T - B), 0.0, 0.0, 1.0);
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragPressure">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        varying vec2 vL;
+        varying vec2 vR;
+        varying vec2 vT;
+        varying vec2 vB;
+        uniform sampler2D u_pressure;
+        uniform sampler2D u_divergence;
+
+        void main () {
+            float L = texture2D(u_pressure, vL).x;
+            float R = texture2D(u_pressure, vR).x;
+            float T = texture2D(u_pressure, vT).x;
+            float B = texture2D(u_pressure, vB).x;
+            float divergence = texture2D(u_divergence, vUv).x;
+            gl_FragColor = vec4((L + R + B + T - divergence) * 0.25, 0.0, 0.0, 1.0);
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragGradientSubtract">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        varying vec2 vL;
+        varying vec2 vR;
+        varying vec2 vT;
+        varying vec2 vB;
+        uniform sampler2D u_pressure;
+        uniform sampler2D u_velocity;
+
+        void main () {
+            float L = texture2D(u_pressure, vL).x;
+            float R = texture2D(u_pressure, vR).x;
+            float T = texture2D(u_pressure, vT).x;
+            float B = texture2D(u_pressure, vB).x;
+            vec2 vel = texture2D(u_velocity, vUv).xy;
+            vel -= vec2(R - L, T - B);
+            gl_FragColor = vec4(vel, 0.0, 1.0);
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragSplat">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D u_target;
+        uniform float u_ratio;
+        uniform vec3 u_color;
+        uniform vec2 u_point;
+        uniform float u_radius;
+
+        void main () {
+            vec2 p = vUv - u_point;
+            p.x *= u_ratio;
+            vec3 splat = exp(-dot(p, p) / u_radius) * u_color;
+            vec3 base = texture2D(u_target, vUv).xyz;
+            gl_FragColor = vec4(base + splat, 1.0);
+        }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragDisplay">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D u_fluid;       // persistent reveal mask (white = revealed)
+        uniform sampler2D u_image0;      // current image (being scratched away)
+        uniform sampler2D u_image1;      // next image (revealed underneath)
+        uniform float u_blend;           // 0 = normal reveal, rises to 1 on final transition
+
+        void main () {
+            vec3 mask = texture2D(u_fluid, vUv).rgb;
+
+            // Convert mask brightness to a sharp reveal amount.
+            // pow(..., 0.5) softens the edge slightly for a liquid feel,
+            // but areas you've moved over stay fully revealed.
+            float revealed = clamp(mask.r + mask.g + mask.b, 0.0, 1.0);
+            revealed = pow(revealed, 0.5);
+
+            // During final auto-transition (u_blend > 0), sweep the rest away smoothly
+            float finalSweep = clamp(u_blend * 3.0, 0.0, 1.0);
+            float blendAmount = clamp(revealed + finalSweep, 0.0, 1.0);
+
+            vec4 c0 = texture2D(u_image0, vUv); // picture 1 (fades away as you reveal)
+            vec4 c1 = texture2D(u_image1, vUv); // picture 2 (appears underneath)
+            gl_FragColor = mix(c0, c1, blendAmount);
+        }
+    </script>
+</head>
+<body>
+    <canvas id="c"></canvas>
+
+    <div class="ui">
+        <div class="label">
+            <span class="subtitle">LIQUID REVEAL</span>
+            <h1>MOVE YOUR CURSOR</h1>
+            <p>by Schweits</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

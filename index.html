@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Production</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="WAVE/LOGA/WAVE Production/WP LOGO/PNG/LOGO - BLACK.png">
+
+    <script type="x-shader/x-vertex" id="vertShader">
+        precision highp float;
+        attribute vec2 aPosition;
+        varying vec2 vUv;
+        varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+        uniform vec2 u_texel;
+        void main () {
+            vUv = aPosition * 0.5 + 0.5;
+            vL = vUv - vec2(u_texel.x, 0.0);
+            vR = vUv + vec2(u_texel.x, 0.0);
+            vT = vUv + vec2(0.0, u_texel.y);
+            vB = vUv - vec2(0.0, u_texel.y);
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragAdvection">
+        precision highp float;
+        precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D u_velocity; uniform sampler2D u_source;
+        uniform vec2 u_texel; uniform vec2 u_dyeTexel;
+        uniform float u_dt; uniform float u_dissipation;
+        vec4 bilerp(sampler2D sam, vec2 uv, vec2 tsize) {
+            vec2 st = uv / tsize - 0.5;
+            vec2 iuv = floor(st); vec2 fuv = fract(st);
+            vec4 a = texture2D(sam, (iuv + vec2(0.5, 0.5)) * tsize);
+            vec4 b = texture2D(sam, (iuv + vec2(1.5, 0.5)) * tsize);
+            vec4 c = texture2D(sam, (iuv + vec2(0.5, 1.5)) * tsize);
+            vec4 d = texture2D(sam, (iuv + vec2(1.5, 1.5)) * tsize);
+            return mix(mix(a, b, fuv.x), mix(c, d, fuv.x), fuv.y);
+        }
+        void main () {
+            vec2 coord = vUv - u_dt * bilerp(u_velocity, vUv, u_texel).xy * u_texel;
+            gl_FragColor = u_dissipation * bilerp(u_source, coord, u_dyeTexel);
+            gl_FragColor.a = 1.0;
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragDivergence">
+        precision highp float; precision highp sampler2D;
+        varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+        uniform sampler2D u_velocity;
+        void main () {
+            gl_FragColor = vec4(0.5 * (texture2D(u_velocity,vR).x - texture2D(u_velocity,vL).x + texture2D(u_velocity,vT).y - texture2D(u_velocity,vB).y), 0.0, 0.0, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragPressure">
+        precision highp float; precision highp sampler2D;
+        varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+        uniform sampler2D u_pressure; uniform sampler2D u_divergence;
+        void main () {
+            float L=texture2D(u_pressure,vL).x, R=texture2D(u_pressure,vR).x, T=texture2D(u_pressure,vT).x, B=texture2D(u_pressure,vB).x;
+            gl_FragColor = vec4((L+R+B+T - texture2D(u_divergence,vUv).x)*0.25, 0.0, 0.0, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragGradientSubtract">
+        precision highp float; precision highp sampler2D;
+        varying vec2 vUv; varying vec2 vL; varying vec2 vR; varying vec2 vT; varying vec2 vB;
+        uniform sampler2D u_pressure; uniform sampler2D u_velocity;
+        void main () {
+            float L=texture2D(u_pressure,vL).x, R=texture2D(u_pressure,vR).x, T=texture2D(u_pressure,vT).x, B=texture2D(u_pressure,vB).x;
+            vec2 vel = texture2D(u_velocity,vUv).xy - vec2(R-L, T-B);
+            gl_FragColor = vec4(vel, 0.0, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragSplat">
+        precision highp float; precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D u_target; uniform float u_ratio; uniform vec3 u_color; uniform vec2 u_point; uniform float u_radius;
+        void main () {
+            vec2 p = vUv - u_point; p.x *= u_ratio;
+            gl_FragColor = vec4(texture2D(u_target,vUv).xyz + exp(-dot(p,p)/u_radius)*u_color, 1.0);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragDisplay">
+        precision highp float; precision highp sampler2D;
+        varying vec2 vUv;
+        uniform sampler2D u_fluid; uniform sampler2D u_image0; uniform sampler2D u_image1; uniform float u_blend;
+        void main () {
+            vec3 mask = texture2D(u_fluid, vUv).rgb;
+            float revealed = pow(clamp(mask.r+mask.g+mask.b, 0.0, 1.0), 0.5);
+            float blendAmount = clamp(revealed + clamp(u_blend*3.0,0.0,1.0), 0.0, 1.0);
+            gl_FragColor = mix(texture2D(u_image0,vUv), texture2D(u_image1,vUv), blendAmount);
+        }
+    </script>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="index.html" class="logo">
+            <img src="WAVE/LOGA/WAVE Production/WP LOGO/PNG/LOGO - WHITE.png" alt="Wave Production">
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#music">MUSIC</a></li>
+                <li><a href="#tour">TOUR</a></li>
+                <li><a href="#videos">VIDEOS</a></li>
+                <li><a href="#archive">ARCHIVE</a></li>
+                <li><a href="#lpu">LPU</a></li>
+                <li><a href="#store">STORE</a></li>
+                <li><a href="#about">ABOUT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <canvas id="c"></canvas>
+        <div class="hero-label">
+        </div>
+    </section>
+
+    <main>
+        <section id="music"><!-- music content --></section>
+        <section id="tour"><!-- tour content --></section>
+        <section id="videos"><!-- videos content --></section>
+        <section id="archive"><!-- archive content --></section>
+        <section id="lpu"><!-- lpu content --></section>
+        <section id="store"><!-- store content --></section>
+        <section id="about"><!-- about content --></section>
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="site-footer">
+        <span>© 2026 Wave Production</span>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Cookie Policy</a>
+            <a href="#">Consent Preferences</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

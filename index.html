@@ -94,50 +94,144 @@
 </head>
 <body>
 
+    <!-- ── Header ── -->
     <header class="site-header">
-        <a href="index.html" class="logo">
+        <a href="#hero" class="logo">
             <img src="WAVE/LOGA/WAVE Production/WP LOGO/PNG/LOGO - WHITE.png" alt="Wave Production">
         </a>
         <nav class="main-nav">
             <ul>
-                <li><a href="#music">MUSIC</a></li>
-                <li><a href="#tour">TOUR</a></li>
-                <li><a href="#videos">VIDEOS</a></li>
-                <li><a href="#archive">ARCHIVE</a></li>
-                <li><a href="#lpu">LPU</a></li>
-                <li><a href="#store">STORE</a></li>
-                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#music" class="nav-link">MUSIC</a></li>
+                <li><a href="#tour" class="nav-link">TOUR</a></li>
+                <li><a href="#videos" class="nav-link">VIDEOS</a></li>
+                <li><a href="#archive" class="nav-link">ARCHIVE</a></li>
+                <li><a href="#lpu" class="nav-link">LPU</a></li>
+                <li><a href="#store" class="nav-link">STORE</a></li>
+                <li><a href="#about" class="nav-link">ABOUT</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="hero">
+    <!-- ── Hero (fullscreen WebGL canvas) ── -->
+    <section id="hero" class="hero-section">
         <canvas id="c"></canvas>
-        <div class="hero-label">
-        </div>
     </section>
 
-    <main>
-        <section id="music"><!-- music content --></section>
-        <section id="tour"><!-- tour content --></section>
-        <section id="videos"><!-- videos content --></section>
-        <section id="archive"><!-- archive content --></section>
-        <section id="lpu"><!-- lpu content --></section>
-        <section id="store"><!-- store content --></section>
-        <section id="about"><!-- about content --></section>
+    <!-- ── Main scrollable content ── -->
+    <main id="main-content">
+
+        <!-- ══ MUSIC ══ -->
+        <section id="music" class="page-section section-music">
+            <div class="section-inner">
+                <nav class="music-filter-nav">
+                    <button class="filter-btn active" data-filter="all">ALL RELEASES</button>
+                    <button class="filter-btn" data-filter="albums">ALBUMS</button>
+                    <button class="filter-btn" data-filter="eps">EPS &amp; SINGLES</button>
+                    <button class="filter-btn" data-filter="live">LIVE</button>
+                </nav>
+
+                <div class="music-grid" id="musicGrid">
+                    <!-- Cards injected by JS -->
+                </div>
+            </div>
+
+            <!-- Album detail modal -->
+            <div class="modal-overlay" id="albumModal">
+                <div class="modal-box">
+                    <button class="modal-close" id="modalClose">✕</button>
+                    <div class="modal-content" id="modalContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ TOUR ══ -->
+        <section id="tour" class="page-section section-tour">
+            <div class="tour-bg"></div>
+            <div class="section-inner">
+                <div class="tour-hero">
+                    <div class="tour-hero-card">
+                        <div class="tour-hero-logo">
+                            <img src="pngegg.png" alt="Logo" class="tour-logo-img">
+                        </div>
+                        <div class="tour-hero-actions">
+                            <button class="btn-ghost">GET TICKETS</button>
+                            <button class="btn-ghost">LISTEN NOW</button>
+                        </div>
+                        <div class="tour-hero-title">
+                            <span class="tour-band-name">WAVE PRODUCTION</span>
+                            <span class="tour-subtitle">FROM ZERO WORLD TOUR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tour-list" id="tourList">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ VIDEOS ══ -->
+        <section id="videos" class="page-section section-videos">
+            <div class="section-inner">
+                <h2 class="section-heading">VIDEOS</h2>
+                <div class="videos-grid" id="videosGrid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ ARCHIVE ══ -->
+        <section id="archive" class="page-section section-archive">
+            <div class="section-inner">
+                <h2 class="section-heading">ARCHIVE</h2>
+                <p class="section-placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Archivum in progressu.</p>
+            </div>
+        </section>
+
+        <!-- ══ LPU ══ -->
+        <section id="lpu" class="page-section section-lpu">
+            <div class="section-inner">
+                <h2 class="section-heading">LPU</h2>
+                <p class="section-placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. LPU membership coming soon.</p>
+            </div>
+        </section>
+
+        <!-- ══ STORE ══ -->
+        <section id="store" class="page-section section-store">
+            <div class="section-inner">
+                <h2 class="section-heading">STORE</h2>
+                <p class="section-placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Store launching soon.</p>
+            </div>
+        </section>
+
+        <!-- ══ ABOUT ══ -->
+        <section id="about" class="page-section section-about">
+            <div class="about-hero-img">
+                <img src="resources/p1.webp" alt="Wave Production" />
+            </div>
+            <div class="section-inner about-text-block">
+                <h2 class="section-heading">ABOUT</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Wave Production has been at the forefront of sonic exploration since its founding.</p>
+                <p>Ut labore et dolore magna aliqua, enim ad minim veniam quis nostrud exercitation ullamco laboris nisi. The collective draws from diverse musical traditions, blending electronic textures with raw organic energy to create something wholly unique and enduring.</p>
+                <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim. Their live performances are legendary — a communion between artist and audience that transcends the ordinary concert experience and becomes something sacred.</p>
+            </div>
+        </section>
+
     </main>
 
     <!-- ── Footer ── -->
     <footer class="site-footer">
         <span>© 2026 Wave Production</span>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Cookie Policy</a>
-            <a href="#">Consent Preferences</a>
-        </div>
     </footer>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Consent Preferences</a>
+    </div>
 
     <script src="script.js"></script>
+    <script src="sections.js"></script>
 </body>
 </html>

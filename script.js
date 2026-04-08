@@ -27,7 +27,7 @@ const CONFIG = {
     SPLAT_FORCE:          6000,
     REVEAL_THRESHOLD:     0.65,
 
-    IMAGES: ['resources/p1.webp', 'resources/p2.jpg', 'resources/p3.jpg', 'resources/p4.jpg', 'resources/p5.jpg', 'resources/p6.jpg', 'resources/p7.jpg']
+    IMAGES: ['resources/p1.webp', 'resources/p2.jpg', 'resources/p3.jpg', 'resources/p4.jpg', 'resources/p5.jpg']
 };
 
 // ─── CANVAS & WEBGL SETUP ─────────────────────────────────────────

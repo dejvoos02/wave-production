@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,13 +101,13 @@
         </a>
         <nav class="main-nav">
             <ul>
-                <li><a href="#music" class="nav-link">MUSIC</a></li>
-                <li><a href="#tour" class="nav-link">TOUR</a></li>
-                <li><a href="#videos" class="nav-link">VIDEOS</a></li>
+                <li><a href="#news"    class="nav-link">NEWS</a></li>
+                <li><a href="#wave"    class="nav-link">WAVE</a></li>
+                <li><a href="#tbf"     class="nav-link">TBF</a></li>
+                <li><a href="#live"    class="nav-link">LIVE</a></li>
                 <li><a href="#archive" class="nav-link">ARCHIVE</a></li>
-                <li><a href="#lpu" class="nav-link">LPU</a></li>
-                <li><a href="#store" class="nav-link">STORE</a></li>
-                <li><a href="#about" class="nav-link">ABOUT</a></li>
+                <li><a href="#store"   class="nav-link">STORE</a></li>
+                <li><a href="#about"   class="nav-link">ABOUT</a></li>
             </ul>
         </nav>
     </header>
@@ -120,62 +120,170 @@
     <!-- ── Main scrollable content ── -->
     <main id="main-content">
 
-        <!-- ══ MUSIC ══ -->
-        <section id="music" class="page-section section-music">
+        <!-- ══ NEWS ══ -->
+        <section id="news" class="page-section section-news">
             <div class="section-inner">
-                <nav class="music-filter-nav">
-                    <button class="filter-btn active" data-filter="all">ALL RELEASES</button>
-                    <button class="filter-btn" data-filter="albums">ALBUMS</button>
-                    <button class="filter-btn" data-filter="eps">EPS &amp; SINGLES</button>
-                    <button class="filter-btn" data-filter="live">LIVE</button>
-                </nav>
+                <h2 class="section-heading reveal">NEWS</h2>
 
-                <div class="music-grid" id="musicGrid">
-                    <!-- Cards injected by JS -->
-                </div>
-            </div>
-
-            <!-- Album detail modal -->
-            <div class="modal-overlay" id="albumModal">
-                <div class="modal-box">
-                    <button class="modal-close" id="modalClose">✕</button>
-                    <div class="modal-content" id="modalContent"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ══ TOUR ══ -->
-        <section id="tour" class="page-section section-tour">
-            <div class="tour-bg"></div>
-            <div class="section-inner">
-                <div class="tour-hero">
-                    <div class="tour-hero-card">
-                        <div class="tour-hero-logo">
-                            <img src="pngegg.png" alt="Logo" class="tour-logo-img">
-                        </div>
-                        <div class="tour-hero-actions">
-                            <button class="btn-ghost">GET TICKETS</button>
-                            <button class="btn-ghost">LISTEN NOW</button>
-                        </div>
-                        <div class="tour-hero-title">
-                            <span class="tour-band-name">WAVE PRODUCTION</span>
-                            <span class="tour-subtitle">FROM ZERO WORLD TOUR</span>
-                        </div>
+                <!-- Admin panel (hidden by default, toggle with ?admin=1) -->
+                <div class="news-admin" id="newsAdmin">
+                    <div class="news-admin-form">
+                        <h3 class="news-admin-title">NOVÝ PŘÍSPĚVEK</h3>
+                        <input  type="text"     id="newsInputTitle"    class="news-input" placeholder="Nadpis">
+                        <input  type="text"     id="newsInputCategory" class="news-input" placeholder="Kategorie (např. EVENT, RELEASE, UPDATE)">
+                        <input  type="text"     id="newsInputImage"    class="news-input" placeholder="URL obrázku (volitelné)">
+                        <textarea               id="newsInputBody"     class="news-input news-textarea" placeholder="Text příspěvku..."></textarea>
+                        <button class="btn-primary" id="newsPublishBtn">PUBLIKOVAT</button>
                     </div>
                 </div>
 
-                <div class="tour-list" id="tourList">
+                <!-- News grid -->
+                <div class="news-grid" id="newsGrid">
                     <!-- Injected by JS -->
                 </div>
             </div>
         </section>
 
-        <!-- ══ VIDEOS ══ -->
-        <section id="videos" class="page-section section-videos">
+        <!-- ══ WAVE ══ -->
+        <section id="wave" class="page-section section-wave">
             <div class="section-inner">
-                <h2 class="section-heading">VIDEOS</h2>
-                <div class="videos-grid" id="videosGrid">
-                    <!-- Injected by JS -->
+                <h2 class="section-heading reveal">WAVE</h2>
+
+                <div class="wave-intro reveal">
+                    <p class="wave-lead">Wave Production je česká produkční a eventová skupina působící od roku 2020. Spojujeme hudbu, techniku a lidi na jednom místě.</p>
+                </div>
+
+                <div class="wave-pillars">
+                    <!-- DJ Dlabac Jan -->
+                    <div class="wave-pillar reveal">
+                        <div class="wave-pillar-icon">DJ</div>
+                        <div class="wave-pillar-content">
+                            <div class="wave-pillar-title">DJ DLABAC JAN</div>
+                            <p class="wave-pillar-text">Resident DJ a zakladatel Wave Production. Specializuje se na techno, bass music a experimentální elektroniku. Pravidelně hraje na tuzemských festivalech i klubových akcích.</p>
+                        </div>
+                    </div>
+
+                    <!-- Events Hronov -->
+                    <div class="wave-pillar reveal">
+                        <div class="wave-pillar-icon">EV</div>
+                        <div class="wave-pillar-content">
+                            <div class="wave-pillar-title">EVENTS HRONOV</div>
+                            <p class="wave-pillar-text">Organizace pravidelných eventů v Hronově a okolí. Od komorních klubových večerů po venkovní festivaly — Wave Production zajišťuje kompletní produkci, zvuk a světla.</p>
+                        </div>
+                    </div>
+
+                    <!-- Půjčovna vybavení -->
+                    <div class="wave-pillar reveal">
+                        <div class="wave-pillar-icon">GR</div>
+                        <div class="wave-pillar-content">
+                            <div class="wave-pillar-title">PŮJČOVNA VYBAVENÍ</div>
+                            <p class="wave-pillar-text">Půjčujeme profesionální zvukovou a světelnou techniku pro akce všech velikostí. Reproduktory, mixpulty, světelné rigy — vše dostupné k zapůjčení s možností technické podpory na místě.</p>
+                            <a href="mailto:info@waveproduction.cz" class="btn-primary wave-contact-btn">NEZÁVAZNÁ POPTÁVKA</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ TBF ══ -->
+        <section id="tbf" class="page-section section-tbf">
+            <div class="section-inner">
+                <div class="tbf-header reveal">
+                    <h2 class="section-heading">THE BASSLINE FANATIQZ</h2>
+                    <p class="tbf-subtitle">Česká bass music komunita. Tvoříme, hrajeme, žijeme hudbu.</p>
+                </div>
+
+                <!-- Sub-nav -->
+                <nav class="tbf-nav reveal">
+                    <button class="tbf-nav-btn active" data-tbf="crew">CREW</button>
+                    <button class="tbf-nav-btn" data-tbf="events">EVENTS</button>
+                    <button class="tbf-nav-btn" data-tbf="mixes">MIXES</button>
+                </nav>
+
+                <!-- CREW panel -->
+                <div class="tbf-panel active" id="tbfCrew">
+                    <div class="crew-grid" id="crewGrid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- EVENTS panel -->
+                <div class="tbf-panel" id="tbfEvents">
+                    <div class="tbf-events-list" id="tbfEventsList">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- MIXES panel -->
+                <div class="tbf-panel" id="tbfMixes">
+                    <div class="tbf-mixes-grid" id="tbfMixesGrid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DJ detail modal -->
+            <div class="modal-overlay" id="djModal">
+                <div class="modal-box">
+                    <button class="modal-close" id="djModalClose">✕</button>
+                    <div class="modal-content" id="djModalContent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══ LIVE ══ -->
+        <section id="live" class="page-section section-live">
+            <!-- Twitch overlay — shown when stream is active -->
+            <div class="twitch-overlay" id="twitchOverlay">
+                <div class="twitch-header">
+                    <span class="twitch-live-badge">● LIVE</span>
+                    <span class="twitch-channel">THEBASSLINEFANATIQSCZ</span>
+                    <button class="twitch-close-btn" id="twitchCloseBtn">✕ ZAVŘÍT</button>
+                </div>
+                <iframe
+                    id="twitchEmbed"
+                    src=""
+                    allowfullscreen
+                    class="twitch-iframe">
+                </iframe>
+            </div>
+
+            <div class="section-inner">
+                <h2 class="section-heading reveal">LIVE</h2>
+
+                <div class="live-grid">
+                    <!-- Twitch card -->
+                    <div class="live-twitch-card reveal" id="liveTwitchCard">
+                        <div class="live-twitch-preview">
+                            <div class="live-twitch-logo">
+                                <svg viewBox="0 0 24 24" fill="currentColor" class="twitch-icon"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
+                            </div>
+                            <div class="live-twitch-info">
+                                <div class="live-twitch-name">THEBASSLINEFANATIQSCZ</div>
+                                <div class="live-twitch-desc">Sleduj nás live na Twitchi — sety, backstage, Q&amp;A.</div>
+                            </div>
+                            <div class="live-status-dot" id="liveStatusDot"></div>
+                        </div>
+                        <div class="live-twitch-actions">
+                            <button class="btn-twitch" id="watchLiveBtn">SLEDOVAT LIVE</button>
+                            <a href="https://www.twitch.tv/thebasslinefanatiqscz" target="_blank" class="btn-primary">OTEVŘÍT TWITCH</a>
+                        </div>
+                    </div>
+
+                    <!-- Next event countdown -->
+                    <div class="live-next-card reveal">
+                        <div class="live-next-label">PŘÍŠTÍ STREAM</div>
+                        <div class="live-next-countdown" id="liveCountdown">—</div>
+                        <div class="live-next-name" id="liveNextName">Datum brzy</div>
+                    </div>
+                </div>
+
+                <!-- Past streams -->
+                <div class="live-past-section">
+                    <h3 class="live-past-heading reveal">ZÁZNAMY</h3>
+                    <div class="videos-grid" id="liveVodsGrid">
+                        <!-- Injected by JS -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -183,38 +291,76 @@
         <!-- ══ ARCHIVE ══ -->
         <section id="archive" class="page-section section-archive">
             <div class="section-inner">
-                <h2 class="section-heading">ARCHIVE</h2>
-                <p class="section-placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Archivum in progressu.</p>
-            </div>
-        </section>
+                <h2 class="section-heading reveal">ARCHIVE</h2>
 
-        <!-- ══ LPU ══ -->
-        <section id="lpu" class="page-section section-lpu">
-            <div class="section-inner">
-                <h2 class="section-heading">LPU</h2>
-                <p class="section-placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. LPU membership coming soon.</p>
+                <nav class="archive-nav reveal">
+                    <button class="filter-btn active" data-archive="photos">FOTKY</button>
+                    <button class="filter-btn" data-archive="videos">VIDEA</button>
+                </nav>
+
+                <!-- Photos panel -->
+                <div class="archive-panel active" id="archivePhotos">
+                    <div class="archive-photo-grid" id="archivePhotoGrid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Videos panel -->
+                <div class="archive-panel" id="archiveVideos">
+                    <div class="videos-grid" id="archiveVideoGrid">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lightbox -->
+            <div class="modal-overlay" id="lightbox">
+                <div class="lightbox-box">
+                    <button class="modal-close" id="lightboxClose">✕</button>
+                    <img id="lightboxImg" src="" alt="">
+                    <div class="lightbox-caption" id="lightboxCaption"></div>
+                </div>
             </div>
         </section>
 
         <!-- ══ STORE ══ -->
         <section id="store" class="page-section section-store">
             <div class="section-inner">
-                <h2 class="section-heading">STORE</h2>
-                <p class="section-placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Store launching soon.</p>
+                <h2 class="section-heading reveal">STORE</h2>
+
+                <nav class="store-nav reveal">
+                    <button class="filter-btn active" data-store="all">VŠE</button>
+                    <button class="filter-btn" data-store="tshirts">TRIČKA</button>
+                    <button class="filter-btn" data-store="hoodies">MIKINY</button>
+                    <button class="filter-btn" data-store="accessories">DOPLŇKY</button>
+                </nav>
+
+                <div class="store-grid" id="storeGrid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+
+            <!-- Product modal -->
+            <div class="modal-overlay" id="productModal">
+                <div class="modal-box">
+                    <button class="modal-close" id="productModalClose">✕</button>
+                    <div class="modal-content" id="productModalContent"></div>
+                </div>
             </div>
         </section>
 
         <!-- ══ ABOUT ══ -->
         <section id="about" class="page-section section-about">
             <div class="about-hero-img">
-                <img src="resources/p1.webp" alt="Wave Production" />
+                <img src="resources/p1.webp" alt="Wave Production">
             </div>
             <div class="section-inner about-text-block">
-                <h2 class="section-heading">ABOUT</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Wave Production has been at the forefront of sonic exploration since its founding.</p>
-                <p>Ut labore et dolore magna aliqua, enim ad minim veniam quis nostrud exercitation ullamco laboris nisi. The collective draws from diverse musical traditions, blending electronic textures with raw organic energy to create something wholly unique and enduring.</p>
-                <p>Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim. Their live performances are legendary — a communion between artist and audience that transcends the ordinary concert experience and becomes something sacred.</p>
+                <h2 class="section-heading reveal">ABOUT</h2>
+                <p class="reveal">Wave Production vznikla z jednoduché myšlenky — dát lidem, kteří milují hudbu, prostor kde mohou tvořit, hrát a zažívat něco skutečného. Od roku 2020 budujeme komunitu kolem bass music, techna a elektronické scény v Čechách.</p>
+                <p class="reveal">Pod hlavičkou Wave Production působí DJ Dlabac Jan, eventová sekce Hronov a půjčovna profesionálního vybavení. Spolupracujeme s kolektivem The Bassline Fanatiqz, který sdružuje přes deset DJs z celé republiky.</p>
+                <p class="reveal">Naše live akce jsou více než koncerty — jsou to setkání komunity. Každý event stavíme s péčí o zvuk, atmosféru a zážitek, který přesahuje samotnou hudbu.</p>
+                <p class="reveal">Wave Production je otevřená platforma. Pokud máš chuť se zapojit — jako DJ, fotograf, organizátor nebo prostě jako fanoušek — jsme tu pro tebe.</p>
+                <a href="mailto:info@waveproduction.cz" class="btn-primary reveal about-contact-btn">KONTAKT</a>
             </div>
         </section>
 
